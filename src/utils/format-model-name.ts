@@ -46,6 +46,12 @@ function looksLikeVersionComponent(token: string): boolean {
  * `k2`, `m2`): ids like `deepseek-v3.2` or `kimi-k2.5` get their dot
  * split apart by the tokenizer and must re-join as `v3.2` / `k2.5`,
  * never render as "DeepSeek V3 2" / "Kimi K2 5".
+ * Such pairs are lower confidence than pure numeric ones, so they
+ * only merge when the id contains no pure numeric pair — otherwise a
+ * quantization token like `q4_0` (tokenised as `q4` + `0`) would
+ * steal the merge and `llama-3.1-8b-instruct-q4_0` would render
+ * "Llama 3 1 8B Instruct Q4.0" instead of "Llama 3.1 8B Instruct
+ * Q4 0".
  *
  * Conservative on purpose:
  *   - Only the FIRST mergeable pair scanning from the right is collapsed:
@@ -62,6 +68,7 @@ function looksLikeVersionComponent(token: string): boolean {
  *     not "Claude Opus 4 5 20251101".
  */
 function joinTrailingVersionPair(tokens: string[]): string[] {
+  let prefixedMerge: string[] | undefined
   for (let i = tokens.length - 1; i >= 1; i--) {
     const a = tokens[i - 1]
     const b = tokens[i]
@@ -75,11 +82,16 @@ function joinTrailingVersionPair(tokens: string[]): string[] {
         (next === undefined || nextIsDateStamp || !/^\d+$/.test(next))
       ) {
         const merged = [...tokens.slice(0, i - 1), `${a}.${b}`, ...tokens.slice(i + 1)]
-        return merged
+        if (looksLikeVersionComponent(a)) {
+          return merged
+        }
+        if (prefixedMerge === undefined) {
+          prefixedMerge = merged
+        }
       }
     }
   }
-  return tokens
+  return prefixedMerge ?? tokens
 }
 
 /**

@@ -18,6 +18,7 @@ describe('formatModelName', () => {
     ['gemini/gemini-2.5-flash', 'Gemini 2.5 Flash'],
     ['openai/whisper-large-v3', 'Whisper Large V3'],
     ['gpt/dall-e-3', 'Dall E 3'],
+    ['llama-3.1-8b-instruct-q4_0', 'Llama 3.1 8B Instruct Q4 0'],
     ['litellm/deepseek-v3.2', 'DeepSeek V3.2'],
     ['litellm/glm-5.3', 'GLM 5.3'],
     ['litellm/kimi-k2.5', 'Kimi K2.5'],
