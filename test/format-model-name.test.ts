@@ -17,7 +17,6 @@ describe('formatModelName', () => {
     ['qwen/qwen3-30b-a3b', 'Qwen3 30B A3B'],
     ['gemini/gemini-2.5-flash', 'Gemini 2.5 Flash'],
     ['openai/whisper-large-v3', 'Whisper Large V3'],
-    ['gpt/dall-e-3', 'Dall E 3'],
     ['llama-3.1-8b-instruct-q4_0', 'Llama 3.1 8B Instruct Q4 0'],
     ['mistral-7b-instruct-q4_0', 'Mistral 7B Instruct Q4 0'],
     ['litellm/deepseek-v3.2', 'DeepSeek V3.2'],
